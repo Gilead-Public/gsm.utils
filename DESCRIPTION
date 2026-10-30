@@ -1,6 +1,6 @@
 Package: gsm.utils
 Title: Utilities for gsm package developers
-Version: 0.4.0
+Version: 0.4.1
 Authors@R: c(
     person("Jeremy", "Wildfire", , "jwildfire@gmail.com", role = c("aut", "cre")),
     person("Jon", "Harmon", , "jon.harmon@atorusresearch.com", role = "aut",
@@ -14,9 +14,9 @@ Authors@R: c(
 Description: Provides utility functions and file templates to be used for
     the set-up and development of gsm packages.
 License: Apache License (>= 2)
-URL: https://gilead-biostats.github.io/gsm.utils,
-    https://github.com/Gilead-BioStats/gsm.utils
-BugReports: https://github.com/Gilead-BioStats/gsm.utils/issues
+URL: https://gilead-public.github.io/gsm.utils,
+    https://github.com/Gilead-Public/gsm.utils
+BugReports: https://github.com/Gilead-Public/gsm.utils/issues
 Depends:
     R (>= 4.1.0)
 Imports:
@@ -43,7 +43,7 @@ Suggests:
 VignetteBuilder: 
     knitr
 Config/Needs/website: pkgdown, rmarkdown
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.1
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
