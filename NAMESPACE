@@ -19,5 +19,7 @@ export(render_rmd)
 export(update_gsm_package)
 export(update_workflow_version)
 importFrom(cli,qty)
-importFrom(rlang,"%||%")
-importFrom(rlang,.data)
+importFrom(rlang,
+  "%||%",
+  .data
+)
