@@ -25,6 +25,11 @@ runs:
         extra-packages: any::covr any::xml2 any::jsonlite gilead-public/gsm.utils${{ inputs.utils-ref }} local::.
         needs: coverage
 
+    - name: Wait for test data
+      uses: $/wait-for-testdata
+      with:
+        token: ${{ inputs.token }}
+
     - name: Compute coverage
       uses: $/coverage-compute
       with:

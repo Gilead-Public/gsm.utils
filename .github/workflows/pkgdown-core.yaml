@@ -70,6 +70,10 @@ jobs:
           needs: website
           extra-packages: any::pkgdown gilead-public/gsm.utils${{ inputs.utils-ref }} local::.
           cache-version: '1'
+      - name: Wait for test data
+        uses: $/wait-for-testdata
+        with:
+          token: ${{ steps.token.outputs.token }}
       - name: Build and deploy site
         uses: $/pkgdown-deploy
         with:
