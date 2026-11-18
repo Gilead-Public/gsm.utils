@@ -7,7 +7,6 @@ description: >-
   published build that records this merge. Other events, and packages that
   aren't data inputs, use published data as before. Run after slow setup steps.
 
-
 inputs:
   token:
     description: "Token with actions: read (PRs). The default job token works when the job grants actions: read."
