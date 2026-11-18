@@ -7,8 +7,6 @@ description: >-
   published build that records this merge. Other events, and packages that
   aren't data inputs, use published data as before. Run after slow setup steps.
 
-# TODO: Switch the gsm.datasim refs below from feat-183-readiness-checks to
-# actions once Gilead-Public/gsm.datasim#198 is merged.
 
 inputs:
   token:
@@ -38,19 +36,19 @@ runs:
         github.event_name == 'pull_request' ||
         (github.event_name == 'push' &&
           (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main'))
-      uses: gilead-public/gsm.datasim/needs-testdata@feat-183-readiness-checks
+      uses: gilead-public/gsm.datasim/needs-testdata@actions
 
     - name: Wait for PR test data bundle
       id: bundle
       if: github.event_name == 'pull_request' && steps.needs.outputs.needed == 'true'
-      uses: gilead-public/gsm.datasim/wait-for-bundle@feat-183-readiness-checks
+      uses: gilead-public/gsm.datasim/wait-for-bundle@actions
       with:
         token: ${{ inputs.token }}
 
     - name: Wait for this merge's test data
       id: index
       if: github.event_name == 'push' && steps.needs.outputs.needed == 'true'
-      uses: gilead-public/gsm.datasim/wait-for-index@feat-183-readiness-checks
+      uses: gilead-public/gsm.datasim/wait-for-index@actions
       with:
         token: ${{ inputs.token }}
         interval: ${{ inputs.index-interval }}
