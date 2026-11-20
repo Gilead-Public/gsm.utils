@@ -2,7 +2,7 @@ name: "Wait for test data"
 description: >-
   In packages that feed the shared gsm test data (per gsm.datasim's
   needs-testdata), wait for the test data built for this commit and export
-  GSM_TESTDATA_SNAPSHOT. On pull requests, waits for the PR bundle built by
+  GSM_TESTDATA_SNAPSHOT. On pull requests to dev/main, waits for the PR bundle built by
   testdata-pr.yaml (needs actions: read). On pushes to dev/main, waits for the
   published build that records this merge. Other events, and packages that
   aren't data inputs, use published data as before. Run after slow setup steps.
@@ -32,7 +32,8 @@ runs:
     - name: Check whether this repo needs test data
       id: needs
       if: >-
-        github.event_name == 'pull_request' ||
+        (github.event_name == 'pull_request' &&
+          (github.base_ref == 'dev' || github.base_ref == 'main')) ||
         (github.event_name == 'push' &&
           (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main'))
       uses: gilead-public/gsm.datasim/needs-testdata@actions
