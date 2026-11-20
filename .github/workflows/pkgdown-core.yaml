@@ -38,6 +38,8 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      # read: Required to download PR test data bundles.
+      actions: read
     steps:
       - name: Generate token
         uses: $/generate-token
