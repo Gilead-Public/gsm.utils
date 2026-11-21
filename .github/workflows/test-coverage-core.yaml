@@ -22,10 +22,13 @@ on:
 
 jobs:
   coverage:
+    # data-* releases publish test data, not code; skip coverage for them.
+    if: >-
+      github.event_name != 'release' ||
+      !startsWith(github.event.release.tag_name, 'data-')
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
+    # No job-level permissions: inherit the caller's grant, so callers that
+    # don't yet grant actions: read (needed for PR test data bundles) still run.
     steps:
       - name: Generate token
         uses: $/generate-token

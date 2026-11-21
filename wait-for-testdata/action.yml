@@ -1,0 +1,56 @@
+name: "Wait for test data"
+description: >-
+  In packages that feed the shared gsm test data (per gsm.datasim's
+  needs-testdata), wait for the test data built for this commit and export
+  GSM_TESTDATA_SNAPSHOT. On pull requests to dev/main, waits for the PR bundle
+  built by testdata-pr.yaml (needs actions: read). On pushes to dev/main, waits for the
+  published build that records this merge. Other events, and packages that
+  aren't data inputs, use published data as before. Run after slow setup steps.
+
+inputs:
+  token:
+    description: "Token with actions: read (PRs). The default job token works when the job grants actions: read."
+    default: ${{ github.token }}
+  index-interval:
+    description: "Seconds between polls of gsm.datasim's index.json (pushes)."
+    default: "30"
+  index-timeout:
+    description: "Seconds to wait for the post-merge build before failing (pushes)."
+    default: "2700"
+
+outputs:
+  needed:
+    description: "'true' if this package is a test data input and the event uses fresh data."
+    value: ${{ steps.needs.outputs.needed || 'false' }}
+  snapshot-dir:
+    description: "Directory exported as GSM_TESTDATA_SNAPSHOT, if any."
+    value: ${{ steps.bundle.outputs.snapshot-dir || steps.index.outputs.snapshot-dir }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Check whether this repo needs test data
+      id: needs
+      if: >-
+        (github.event_name == 'pull_request' &&
+          (github.base_ref == 'dev' || github.base_ref == 'main')) ||
+        (github.event_name == 'push' &&
+          (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main'))
+      uses: gilead-public/gsm.datasim/needs-testdata@actions
+
+    - name: Wait for PR test data bundle
+      id: bundle
+      if: github.event_name == 'pull_request' && steps.needs.outputs.needed == 'true'
+      uses: gilead-public/gsm.datasim/wait-for-bundle@actions
+      with:
+        token: ${{ inputs.token }}
+
+    - name: Wait for this merge's test data
+      id: index
+      if: github.event_name == 'push' && steps.needs.outputs.needed == 'true'
+      uses: gilead-public/gsm.datasim/wait-for-index@actions
+      with:
+        token: ${{ inputs.token }}
+        interval: ${{ inputs.index-interval }}
+        timeout: ${{ inputs.index-timeout }}
+        download: "true"

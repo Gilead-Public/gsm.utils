@@ -35,9 +35,8 @@ jobs:
       (github.event_name == 'pull_request' && github.event.action != 'closed') ||
       (github.event_name == 'workflow_dispatch' && inputs.mode == 'deploy')
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
+    # No job-level permissions: inherit the caller's grant, so callers that
+    # don't yet grant actions: read (needed for PR test data bundles) still run.
     steps:
       - name: Generate token
         uses: $/generate-token
@@ -70,6 +69,10 @@ jobs:
           needs: website
           extra-packages: any::pkgdown gilead-public/gsm.utils${{ inputs.utils-ref }} local::.
           cache-version: '1'
+      - name: Wait for test data
+        uses: $/wait-for-testdata
+        with:
+          token: ${{ steps.token.outputs.token }}
       - name: Build and deploy site
         uses: $/pkgdown-deploy
         with:
