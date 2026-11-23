@@ -57,7 +57,7 @@
     {
       "name": "testdata-pr.yaml",
       "description": "On PRs to dev/main in test data input packages, build one test data bundle from the PR's head commit.",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "repo": "gilead-public/gsm.datasim",
       "ref": "actions"
     },
